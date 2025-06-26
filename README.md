@@ -60,20 +60,29 @@ taptap --help
 
 ## Command-Line Flags
 
-| Flag | Description |
-|------|-------------|
-| `--deploy` | Deploy current folder to live URL |
-| `--deploy-list` | Show past deployments |
-| `--preview` | Preview site locally before deploy |
-| `--delete` | Delete a deployment |
-| `--help` | Show help message |
+| Flag            | Description                                     |
+|-----------------|-------------------------------------------------|
+| `--deploy`      | Deploy current folder to live URL               |
+| `--deploy-list` | Show past deployments                           |
+| `--preview`     | Preview site locally before deploy              |
+| `--delete`      | Delete a deployment                             |
+| `--open`        | Open the deployed site in default browser       |
+| `--version`     | Show CLI version                                |
+| `--about`       | Show information about this CLI tool            |
+| `--help`        | Show help message                               |
+
 
 ## File Inclusion & Exclusion Rules
 
 ### ✅ Included Files
-- `.html` files (including `index.html`)
+- `.html` files (e.g., `index.html`)
 - `.css` files (stylesheets)
 - `.js` files (JavaScript)
+- Image files (`.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, `.webp`)
+- Video files (`.mp4`, `.webm`, `.ogg`)
+- Font files (`.woff`, `.woff2`, `.ttf`, `.otf`)
+- JSON files (`.json`)
+- Media assets necessary for front-end rendering
 
 ### ❌ Excluded Files
 - Hidden files and directories (starting with `.`)
@@ -83,7 +92,8 @@ taptap --help
 - Archive files (`.zip`, `.rar`, `.tar`, etc.)
 - Markdown files (`.md`, `.markdown`)
 - Files with malformed names (e.g., `index.html,style.css`)
-- Any files that don't match the allowed extensions
+- Any files that don't match the allowed or recognized extensions
+
 
 ## Deployment Process
 
@@ -135,14 +145,18 @@ Your project should have:
 
 ```
 my-project/
-├── index.html          ✅ Included
-├── style.css           ✅ Included
-├── script.js           ✅ Included
-├── about.html          ✅ Included
-├── README.md           ❌ Excluded
-├── package.json        ❌ Excluded
-├── .gitignore          ❌ Excluded
-└── node_modules/       ❌ Excluded
+├── index.html ✅ Included
+├── style.css ✅ Included
+├── script.js ✅ Included
+├── about.html ✅ Included
+├── image.png ✅ Included
+├── video.mp4 ✅ Included
+├── font.woff2 ✅ Included
+├── data.json ✅ Included
+├── README.md ❌ Excluded
+├── package.json ❌ Excluded
+├── .gitignore ❌ Excluded
+└── node_modules/ ❌ Excluded
 ```
 
 ## Troubleshooting
