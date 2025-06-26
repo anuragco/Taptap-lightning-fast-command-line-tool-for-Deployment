@@ -1,6 +1,6 @@
 {
   "name": "@anuragco/taptap-cli",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "bin": {
     "taptap": "./bin/liveserve.js"
   },
@@ -16,9 +16,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment.git"
-},
+    "type": "git",
+    "url": "https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment.git"
+  },
   "keywords": [
     "cli",
     "deploy",
