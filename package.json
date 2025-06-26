@@ -1,6 +1,6 @@
 {
-  "name": "@anuragco/taptap-cli",
-  "version": "1.0.10",
+  "name": "taptap-cli",
+  "version": "1.0.9",
   "bin": {
     "taptap": "./bin/liveserve.js"
   },
@@ -41,6 +41,7 @@
     "inquirer": "^8.2.6",
     "open": "^8.4.0",
     "ora": "^5.4.1",
+    "taptap-cli": "^1.0.9",
     "uuid": "^11.1.0"
   }
 }
