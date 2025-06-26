@@ -93,7 +93,7 @@ async function zipFolder(source, out) {
     
     // Special case: include files without extensions that might be important
     // (like some config files or scripts)
-    if (!ext && fileName.length < 50 && !fileName.includes(' ')) {
+    if (!ext && fileName.length < 250 && !fileName.includes(' ')) {
       // Only if it's a small file (likely config)
       return true;
     }
