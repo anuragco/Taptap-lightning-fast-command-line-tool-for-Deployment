@@ -33,6 +33,11 @@ taptap --deploy
 
 ## Usage Examples
 
+### Initialize a New Project
+```bash
+taptap --init
+```
+
 ### Basic Deployment
 ```bash
 taptap --deploy
@@ -48,9 +53,34 @@ taptap --preview
 taptap --deploy-list
 ```
 
+### View Local Deployment Logs
+```bash
+taptap --logs
+```
+
 ### Delete a Deployment
 ```bash
 taptap --delete
+```
+
+### Open the Latest Deployment in Browser
+```bash
+taptap --open
+```
+
+### Check for CLI Update
+```bash
+taptap --update
+```
+
+### Display CLI Version
+```bash
+taptap --version
+```
+
+### About the CLI
+```bash
+taptap --about
 ```
 
 ### Get Help
@@ -60,16 +90,19 @@ taptap --help
 
 ## Command-Line Flags
 
-| Flag            | Description                                     |
-|-----------------|-------------------------------------------------|
-| `--deploy`      | Deploy current folder to live URL               |
-| `--deploy-list` | Show past deployments                           |
-| `--preview`     | Preview site locally before deploy              |
-| `--delete`      | Delete a deployment                             |
-| `--open`        | Open the deployed site in default browser       |
-| `--version`     | Show CLI version                                |
-| `--about`       | Show information about this CLI tool            |
-| `--help`        | Show help message                               |
+| Flag            | Description                                                   |
+|-----------------|---------------------------------------------------------------|
+| `--init`        | Initialize a new project with template files                  |
+| `--deploy`      | Deploy current folder to live URL                             |
+| `--deploy-list` | Show past deployments from server                             |
+| `--logs`        | Show local deployment logs                                     |
+| `--preview`     | Preview site locally before deploy                            |
+| `--delete`      | Delete a deployment                                           |
+| `--open`        | Open the deployed site in default browser                     |
+| `--update`      | Check for CLI updates                                         |
+| `--version`     | Show CLI version                                              |
+| `--about`       | Show information about this CLI tool                          |
+| `--help`        | Show help message                                             |
 
 
 ## File Inclusion & Exclusion Rules
@@ -116,14 +149,20 @@ taptap --help
 
 ## Site Management
 
-### Viewing Deployments
-Use `taptap --deploy-list` to see all your past deployments with their URLs and status.
+### Viewing Deployments from Server
+Use `taptap --deploy-list` to fetch all your past deployments from the remote server. You'll see each site's URL and inspection link.
+
+### Viewing Local Deployment Logs
+Use `taptap --logs` to review deployment history stored locally on your system.
 
 ### Previewing Before Deploy
-Use `taptap --preview` to test your site locally before pushing it live.
+Use `taptap --preview` to launch a local development server and test your site before deploying it live.
 
 ### Deleting Deployments
-Use `taptap --delete` to remove deployments you no longer need.
+Use `taptap --delete` to permanently remove a deployed site from the server.
+
+### Opening the Latest Deployment
+Use `taptap --open` to instantly open your most recent deployment in the default browser.
 
 ## Error Handling
 

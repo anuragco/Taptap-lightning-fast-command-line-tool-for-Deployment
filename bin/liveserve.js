@@ -12,15 +12,92 @@ const zipFolder = require('../utils/zipFolder');
 const previewSite = require('../utils/localServer');
 const pkg = require('../package.json');
 const API_BASE = 'https://api.checkscript.site';
+const open = require('open');
+
 
 (async () => {
   const args = process.argv.slice(2);
+  const notifierModule = await import('update-notifier');
+  const updateNotifier = notifierModule.default;
+  const notifier = updateNotifier({ pkg, updateCheckInterval: 0 });
+
+  if (notifier.update) {
+  console.log(chalk.yellow(`\n🚨 New version available: ${notifier.update.latest}. You're using ${pkg.version}`));
+  console.log(`Run ${chalk.cyan(`npm i -g taptap-cli`)} to update.\n`);
+
+  // 🔒 Block execution if mandatory
+  if (notifier.update.latest.split('.')[2] !== pkg.version.split('.')[2]) {
+    console.log(chalk.red('⚠️  Mandatory update required! Please update the CLI.\n'));
+    process.exit(1);
+  }
+}
+
+function initProject() {
+  const files = {
+    'index.html': '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Site</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <h1>Hello from Taptap CLI!</h1>\n  <script src="script.js"></script>\n</body>\n</html>',
+    'style.css': 'body { font-family: Arial; background: #f2f2f2; text-align: center; padding: 50px; }',
+    'script.js': 'console.log("Welcome to Taptap CLI Project!");',
+    'README.md': '# My Static Site\nDeployed with Taptap CLI.'
+  };
+
+  for (const [file, content] of Object.entries(files)) {
+    if (!fs.existsSync(file)) {
+      fs.writeFileSync(file, content);
+      console.log(chalk.green(`✔ Created ${file}`));
+    } else {
+      console.log(chalk.yellow(`⚠ ${file} already exists, skipping.`));
+    }
+  }
+
+  console.log(chalk.blueBright('\n✅ Project initialized. Start building!\n'));
+}
+
+function showLogs() {
+  const logFile = path.join(__dirname, '..', '.taptap-logs.json');
+  
+  if (!fs.existsSync(logFile)) {
+    console.log(chalk.red('🚫 No deploy logs found.'));
+    return;
+  }
+
+  let logs;
+  try {
+    const raw = fs.readFileSync(logFile, 'utf-8').trim();
+    if (!raw) throw new Error('Empty log file');
+    logs = JSON.parse(raw);
+  } catch (err) {
+    console.log(chalk.red('🚫 Failed to read logs: Invalid or empty JSON.'));
+    return;
+  }
+
+  if (!logs.length) {
+    console.log(chalk.red('🚫 No entries in logs.'));
+    return;
+  }
+
+  console.log(chalk.blueBright('\n📦 Deployment Logs:\n'));
+  logs.forEach((log, index) => {
+    console.log(`${index + 1}. ${chalk.green(log.project)} - ${log.url}`);
+    console.log(`   ${chalk.gray(new Date(log.timestamp).toLocaleString())}`);
+  });
+}
+
+
+if (args.includes('--init')) {
+  initProject();
+} else if (args.includes('--logs')) {
+  showLogs();
+} else if (args.includes('--update')) {
+  console.log(chalk.cyan(`\nYou're on v${pkg.version}. Latest is ${notifier.update?.latest || 'same'}.\n`));
+  process.exit(0);
+}
 
   // --preview
   if (args.includes('--preview')) {
     await previewSite();
     return;
   }
+  
 
   // --deploy-list
   if (args.includes('--deploy-list')) {
@@ -49,6 +126,25 @@ const API_BASE = 'https://api.checkscript.site';
 
     return;
   }
+
+  if (args.includes('--open')) {
+  const logFile = path.join(__dirname, '..', '.taptap-logs.json');
+  if (!fs.existsSync(logFile)) {
+    console.log(chalk.red('🚫 No deploy logs found.'));
+    process.exit(1);
+  }
+
+  const logs = JSON.parse(fs.readFileSync(logFile));
+  if (!logs.length) {
+    console.log(chalk.red('🚫 No deployments found.'));
+    process.exit(1);
+  }
+
+  const latest = logs[logs.length - 1];
+  console.log(chalk.blue(`🌐 Opening ${latest.url}...`));
+  await open(latest.url);
+  return;
+}
 
   // --delete
   if (args.includes('--delete')) {
@@ -203,6 +299,18 @@ A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly fr
       uploadSpinner.succeed('✅ Upload successful!');
       console.log(`\n🔗 ${chalk.green(res.data.url)}`);
       console.log(`📁 Inspect: ${chalk.yellow(`${res.data.url}list/`)}\n`);
+
+      const logFile = path.join(__dirname, '..', '.taptap-logs.json');
+      let logs = [];
+      if (fs.existsSync(logFile)) {
+        logs = JSON.parse(fs.readFileSync(logFile));
+      }
+      logs.push({
+        project: title || 'Untitled',
+        url: res.data.url,
+        timestamp: Date.now()
+      });
+      fs.writeFileSync(logFile, JSON.stringify(logs, null, 2));
       
       // 🔧 Test the deployed site
       const testSpinner = ora('🧪 Testing deployed site...').start();
@@ -255,11 +363,14 @@ A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly fr
   🔧 ${chalk.cyanBright('Taptap CLI')}
 
   Usage:
+     ${chalk.green('--init')}            Initialize a new project with template files
     ${chalk.green('--deploy')}           Deploy current folder to live URL
-    ${chalk.green('--deploy-list')}      Show past deployments
+    ${chalk.green('--deploy-list')}      Show past deployments from server
+    ${chalk.green('--logs')}             Show local deployment logs
     ${chalk.green('--preview')}          Preview site locally before deploy
     ${chalk.green('--delete')}           Delete a deployment
     ${chalk.green('--open')}             Open the deployed site in default browser
+    ${chalk.green('--update')}           Check for CLI updates
     ${chalk.green('--version')}          Show CLI version
     ${chalk.green('--about')}            Show information about this CLI tool
     ${chalk.green('--help')}             Show this help message
