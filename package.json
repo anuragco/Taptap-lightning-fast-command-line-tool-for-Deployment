@@ -1,15 +1,15 @@
 {
   "name": "taptap-cli",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "bin": {
     "taptap": "./bin/liveserve.js"
   },
   "pkg": {
-  "assets": [
-    "bin/**/*"
-  ],
-  "scripts": "bin/liveserve.js"
-},
+    "assets": [
+      "bin/**/*"
+    ],
+    "scripts": "bin/liveserve.js"
+  },
   "description": "A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly from your terminal.",
   "main": "index.js",
   "scripts": {
