@@ -10,6 +10,9 @@
   ],
   "scripts": "bin/liveserve.js"
 },
+"publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "description": "A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly from your terminal.",
   "main": "index.js",
   "scripts": {
