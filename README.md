@@ -1,250 +1,326 @@
 # Taptap CLI
 
-A lightning-fast command-line tool for deploying static HTML, CSS, and JavaScript projects to remote servers with zero configuration hassle.
+> A lightning-fast, secure command-line tool for deploying static web projects with built-in authentication and zero configuration hassle.
 
-## Description
+## 🚀 Overview
 
-Taptap CLI is designed to streamline the deployment process for front-end developers and students working on static web projects. With a single command, you can deploy your HTML, CSS, and JavaScript files to a remote server, making it perfect for showcasing projects, assignments, or prototypes.
+Taptap CLI revolutionizes the deployment experience for front-end developers, students, and teams working on static web projects. Deploy your HTML, CSS, and JavaScript applications to production-ready URLs in seconds, not minutes.
 
-The tool automatically detects your project structure, filters relevant files, packages them securely, and deploys them via API - all while keeping your workflow clean and efficient.
+With intelligent project detection, secure user authentication, and automated deployment pipelines, Taptap CLI transforms complex deployment workflows into a single command experience.
 
-## Installation
+## ✨ Key Features
 
-Install Taptap CLI globally using npm:
+- **🔐 Secure Authentication** - User registration and login system for protected deployments
+- **⚡ Lightning Fast** - Deploy in seconds with optimized compression and transfer
+- **🎯 Zero Configuration** - Works out of the box with intelligent project detection
+- **📊 Deployment Management** - Track, manage, and delete your deployed sites
+- **🔍 Local Preview** - Test your site locally before going live
+- **🌐 Instant URLs** - Get production-ready URLs immediately after deployment
+- **📝 Smart File Filtering** - Automatically includes only necessary web assets
+- **🗂️ Deployment History** - Complete audit trail of all your deployments
+
+## 📦 Installation
+
+Install Taptap CLI globally via npm:
 
 ```bash
 npm install -g taptap-cli
 ```
 
-## ⚠️ Important Notice
+**System Requirements:**
+- Node.js 14+ 
+- npm 6+
+- Internet connection for deployment
 
-**Sites deployed without a support token will be automatically taken down after 120 days.** 
+## 🔑 Authentication System
 
-If you need longer hosting or want to avoid the 120-day limit, please contact support to obtain a token for extended hosting.
+Taptap CLI now requires user authentication for all deployment operations. This ensures secure access to your projects and deployment history.
 
-## Quick Start
+### First Time Setup
 
-Navigate to your project directory and deploy:
+1. **Register a new account:**
+   ```bash
+   taptap --register
+   ```
 
+2. **Login to your account:**
+   ```bash
+   taptap --login
+   ```
+
+3. **Verify your session:**
+   ```bash
+   taptap --whoami
+   ```
+
+### Authentication Methods
+
+| Method | Command | Description |
+|--------|---------|-------------|
+| Browser Auth | `taptap --login` | Secure browser-based authentication (recommended) |
+| Auto-Open Browser | `taptap --login --open` | Opens auth page automatically |
+| Direct CLI | `taptap --login --direct` | Email/password prompt in terminal |
+
+## 🚀 Quick Start Guide
+
+### 1. Initialize Your Project
 ```bash
-cd my-awesome-project
-taptap --deploy
-```
-
-## Usage Examples
-
-### Initialize a New Project
-```bash
+# Create a new project with template files
 taptap --init
 ```
 
-### Basic Deployment
+### 2. Authenticate
 ```bash
+# Register new account
+taptap --register
+
+# Login to existing account
+taptap --login
+```
+
+### 3. Deploy Your Site
+```bash
+# Navigate to your project directory
+cd my-awesome-project
+
+# Deploy to live URL
 taptap --deploy
 ```
 
-### Preview Site Locally Before Deploying
+### 4. Manage Your Deployments
 ```bash
-taptap --preview
-```
-
-### View Past Deployments
-```bash
+# View all your deployed sites
 taptap --deploy-list
-```
 
-### View Local Deployment Logs
-```bash
-taptap --logs
-```
+# Open your latest site
+taptap --open
 
-### Delete a Deployment
-```bash
+# Delete a specific deployment
 taptap --delete
 ```
 
-### Open the Latest Deployment in Browser
-```bash
-taptap --open
+## 📋 Complete Command Reference
+
+### Core Commands
+
+| Flag | Alias | Description | Auth Required |
+|------|-------|-------------|---------------|
+| `--init` | `init`, `-i` | Initialize new project with template files | ❌ |
+| `--deploy` | `deploy`, `-d` | Deploy current folder to live URL | ✅ |
+| `--preview` | `preview`, `-p` | Preview site locally before deploying | ❌ |
+| `--open` | `open`, `-o` | Open most recent deployment in browser | ❌ |
+
+### Deployment Management
+
+| Flag | Alias | Description | Auth Required |
+|------|-------|-------------|---------------|
+| `--deploy-list` | `deploy-list`, `-dl` | Show all past deployments from server | ✅ |
+| `--delete` | `delete`, `-del` | Delete selected deployment from server | ✅ |
+| `--logs` | `logs`, `-l` | Show local deployment logs | ❌ |
+
+### Authentication
+
+| Flag | Alias | Description |
+|------|-------|-------------|
+| `--register` | `register`, `-r` | Register new CLI user account |
+| `--login` | `login` | Log in using browser-based auth |
+| `--login --open` | - | Login and auto-open auth page |
+| `--login --direct` | - | Direct CLI login (email/password) |
+| `--logout` | `logout` | Logout current user session |
+| `--logout --silent` | `logout -s` | Logout quietly without output |
+| `--whoami` | `whoami`, `-w` | Display current logged-in user info |
+
+### Utility Commands
+
+| Flag | Alias | Description |
+|------|-------|-------------|
+| `--update` | `update`, `-u` | Check for CLI updates |
+| `--version` | `version`, `-v` | Show current CLI version |
+| `--about` | `about`, `-a` | Show CLI and author information |
+| `--help` | `help` | Display help and usage instructions |
+
+## 📁 File Processing Rules
+
+### ✅ Included Files
+```
+📄 HTML Files       → .html, .htm
+🎨 Stylesheets      → .css, .scss, .sass
+⚡ JavaScript       → .js, .mjs, .ts
+🖼️ Images           → .png, .jpg, .jpeg, .gif, .svg, .webp, .ico
+🎥 Videos           → .mp4, .webm, .ogg, .avi
+🔤 Fonts            → .woff, .woff2, .ttf, .otf, .eot
+📊 Data Files       → .json, .xml
+📄 Documents        → .pdf, .txt
 ```
 
-### Check for CLI Update
-```bash
-taptap --update
+### ❌ Excluded Files
+```
+🔒 Hidden Files     → .*, .env, .gitignore
+📦 Dependencies     → node_modules/, vendor/
+🗂️ Version Control  → .git/, .svn/
+📝 Documentation    → .md, .markdown, README.*
+🗜️ Archives         → .zip, .rar, .tar, .gz
+📋 Logs             → .log, .logs
+⚙️ Config Files     → package.json, webpack.config.js
 ```
 
-### Display CLI Version
+## 🔄 Deployment Workflow
+
+### Automated Deployment Process
+
+```mermaid
+graph LR
+    A[Project Scan] --> B[Authentication Check]
+    B --> C[File Filtering]
+    C --> D[Temporary Packaging]
+    D --> E[Compression]
+    E --> F[Secure Upload]
+    F --> G[URL Generation]
+    G --> H[Cleanup]
+    H --> I[Success Notification]
+```
+
+1. **🔍 Project Detection** - Validates `index.html` presence and project structure
+2. **🔐 Authentication Verification** - Ensures valid user session
+3. **📋 File Collection** - Gathers deployable assets using inclusion rules
+4. **📦 Temporary Packaging** - Creates optimized deployment bundle
+5. **🗜️ Compression** - Efficient zip compression for faster transfer
+6. **🔒 Secure Upload** - Encrypted transfer to deployment servers
+7. **🌐 URL Assignment** - Generates unique, production-ready URL
+8. **🧹 Cleanup** - Removes temporary files and artifacts
+
+## 🏗️ Project Structure Examples
+
+### ✅ Valid Project Structure
+```
+my-portfolio/
+├── index.html              ✅ Entry point
+├── styles/
+│   ├── main.css           ✅ Stylesheets
+│   └── responsive.css     ✅ Additional CSS
+├── scripts/
+│   ├── app.js            ✅ JavaScript
+│   └── utils.js          ✅ Utilities
+├── assets/
+│   ├── logo.png          ✅ Images
+│   ├── hero-video.mp4    ✅ Media
+│   └── fonts/
+│       └── custom.woff2  ✅ Fonts
+├── data/
+│   └── config.json       ✅ Data files
+├── README.md             ❌ Excluded
+├── package.json          ❌ Excluded
+└── node_modules/         ❌ Excluded
+```
+
+### ⚠️ Missing Requirements
+```
+broken-project/
+├── main.html             ❌ No index.html
+├── style.css             ✅ CSS present
+└── script.js             ✅ JS present
+```
+
+## 🛡️ Security & Privacy
+
+### Data Protection
+- **🔐 Encrypted Authentication** - Secure token-based auth system
+- **🌐 HTTPS Only** - All communications encrypted in transit
+- **🚫 No Source Code Storage** - Temporary processing only
+- **🔒 User Isolation** - Complete separation between user accounts
+- **⏰ Session Management** - Automatic token expiration and renewal
+
+### Privacy Commitment
+- No tracking or analytics on deployed sites
+- No access to your source code post-deployment
+- Complete user data control and deletion rights
+- Transparent data handling practices
+
+## ⚠️ Important Notices
+
+### Hosting Duration
+- **🆓 Free Tier**: Sites automatically removed after **120 days**
+- **💼 Extended Hosting**: Contact support for longer hosting periods
+- **⚡ Renewal**: Simply redeploy to reset the 120-day timer
+
+### Best Practices
+- Always test with `--preview` before deploying
+- Use meaningful project names for easy identification
+- Regularly backup your deployment URLs
+- Keep your CLI updated for latest features and security
+
+## 🔧 Troubleshooting
+
+### Common Issues & Solutions
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| "No index.html found" | Missing entry point | Ensure `index.html` exists in project root |
+| "Authentication required" | Not logged in | Run `taptap --login` |
+| "Deployment failed" | Network/server error | Check connection, retry deployment |
+| "Session expired" | Token timeout | Re-authenticate with `taptap --login` |
+| "Invalid project structure" | Missing required files | Verify project contains web assets |
+
+### Debug Commands
 ```bash
+# Check authentication status
+taptap --whoami
+
+# View detailed logs
+taptap --logs
+
+# Test project locally
+taptap --preview
+
+# Verify CLI version
 taptap --version
 ```
 
-### About the CLI
-```bash
-taptap --about
-```
+## 🚧 Roadmap & Future Features
 
-### Get Help
-```bash
-taptap --help
-```
-
-## Command-Line Flags
-
-| Flag            | Description                                                   |
-|-----------------|---------------------------------------------------------------|
-| `--init`        | Initialize a new project with template files                  |
-| `--deploy`      | Deploy current folder to live URL                             |
-| `--deploy-list` | Show past deployments from server                             |
-| `--logs`        | Show local deployment logs                                     |
-| `--preview`     | Preview site locally before deploy                            |
-| `--delete`      | Delete a deployment                                           |
-| `--open`        | Open the deployed site in default browser                     |
-| `--update`      | Check for CLI updates                                         |
-| `--version`     | Show CLI version                                              |
-| `--about`       | Show information about this CLI tool                          |
-| `--help`        | Show help message                                             |
-
-
-## File Inclusion & Exclusion Rules
-
-### ✅ Included Files
-- `.html` files (e.g., `index.html`)
-- `.css` files (stylesheets)
-- `.js` files (JavaScript)
-- Image files (`.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, `.webp`)
-- Video files (`.mp4`, `.webm`, `.ogg`)
-- Font files (`.woff`, `.woff2`, `.ttf`, `.otf`)
-- JSON files (`.json`)
-- Media assets necessary for front-end rendering
-
-### ❌ Excluded Files
-- Hidden files and directories (starting with `.`)
-- `node_modules/` directory
-- `.git/` directory
-- Log files (`.log`, `.logs`)
-- Archive files (`.zip`, `.rar`, `.tar`, etc.)
-- Markdown files (`.md`, `.markdown`)
-- Files with malformed names (e.g., `index.html,style.css`)
-- Any files that don't match the allowed or recognized extensions
-
-
-## Deployment Process
-
-### What Happens During Deployment
-
-1. **Project Detection**: Scans current directory for `index.html` file
-2. **File Filtering**: Collects only `.html`, `.css`, and `.js` files based on inclusion rules
-3. **Temporary Packaging**: Creates a `tempdeploy/` folder and copies filtered files
-4. **Compression**: Zips the temporary folder for efficient transfer
-5. **API Upload**: Sends the zip file to the deployment server
-6. **URL Generation**: Receives the live site URL from the server
-7. **Cleanup**: Removes temporary folder and zip file
-
-### After Deployment
-
-- Your site is live at the provided URL
-- All temporary files are automatically cleaned up
-- You receive confirmation of successful deployment
-- **Sites remain active for 120 days** (unless you have a support token)
-
-## Site Management
-
-### Viewing Deployments from Server
-Use `taptap --deploy-list` to fetch all your past deployments from the remote server. You'll see each site's URL and inspection link.
-
-### Viewing Local Deployment Logs
-Use `taptap --logs` to review deployment history stored locally on your system.
-
-### Previewing Before Deploy
-Use `taptap --preview` to launch a local development server and test your site before deploying it live.
-
-### Deleting Deployments
-Use `taptap --delete` to permanently remove a deployed site from the server.
-
-### Opening the Latest Deployment
-Use `taptap --open` to instantly open your most recent deployment in the default browser.
-
-## Error Handling
-
-Taptap CLI provides clear error messages for common issues:
-
-- Missing `index.html` file in current directory
-- Network connectivity problems
-- Server-side deployment errors
-- File permission issues
-
-## Development Requirements
-
-Your project should have:
-- An `index.html` file in the root directory
-- Valid HTML, CSS, and/or JavaScript files
-- Proper file naming (avoid special characters and malformed names)
-
-## Example Project Structure
-
-```
-my-project/
-├── index.html ✅ Included
-├── style.css ✅ Included
-├── script.js ✅ Included
-├── about.html ✅ Included
-├── image.png ✅ Included
-├── video.mp4 ✅ Included
-├── font.woff2 ✅ Included
-├── data.json ✅ Included
-├── README.md ❌ Excluded
-├── package.json ❌ Excluded
-├── .gitignore ❌ Excluded
-└── node_modules/ ❌ Excluded
-```
-
-## Troubleshooting
-
-### Common Issues
-
-**No index.html found**: Ensure you're in the correct project directory with an `index.html` file.
-
-**Deployment failed**: Check your internet connection and try again.
-
-**Site went down**: If your site is no longer accessible after 120 days, you'll need to redeploy or contact support for a token.
-
-## Extended Hosting
-
-For sites that need to stay live longer than 120 days, contact support to obtain a token. With a support token, your deployments will have extended hosting without the automatic takedown.
-
-## Author
-
-**Anurag Anand**  
-Student at LPU Punjab  
-Passionate about making deployment simple and accessible for developers.
-
-## License
-
-ISC License - Free to use, modify, and distribute.
-
-## Future Improvements
-
-### Planned Features
-- **Custom File Extensions**: Support for additional file types (images, fonts, etc.)
-- **Environment Variables**: Store tokens securely in config files
-- **Multiple Server Support**: Deploy to different environments (staging, production)
-- **Deployment History**: Enhanced tracking and management of deployments
-- **Custom Domain Mapping**: Connect deployed sites to personal domains
-- **Real-time Logs**: Live deployment progress with detailed status updates
-- **Rollback Functionality**: Easily revert to previous deployments
-- **Team Collaboration**: Share projects with team members
-- **Template System**: Pre-built templates for common project types
-- **Performance Analytics**: Basic site performance metrics post-deployment
+### Coming Soon
+- **🎨 Custom Domains** - Connect your own domain names
+- **🔄 CI/CD Integration** - GitHub Actions and GitLab CI support
+- **📊 Analytics Dashboard** - Basic site performance metrics
+- **👥 Team Collaboration** - Share projects with team members
+- **🎯 A/B Testing** - Deploy multiple versions for testing
+- **🌍 CDN Integration** - Global content distribution
+- **🔧 Build Pipeline** - Support for modern frameworks (React, Vue, Angular)
 
 ### Community Contributions
-We welcome contributions! Future versions may include:
-- Plugin system for custom preprocessing
-- Integration with popular frameworks
-- Automatic SSL certificate generation
-- CDN optimization for static assets
+We welcome contributions for:
+- **🔌 Plugin System** - Custom preprocessing workflows
+- **📱 Framework Templates** - Pre-built project scaffolds
+- **🛠️ Developer Tools** - Enhanced debugging and monitoring
+- **🌐 Internationalization** - Multi-language support
+
+## 👨‍💻 About the Author
+
+**Anurag Anand**  
+Computer Science Student at LPU Punjab  
+Passionate about simplifying deployment workflows for developers worldwide.
+
+*"Making deployment accessible to everyone, from students to professionals."*
+
+## 📄 License
+
+**ISC License** - Free to use, modify, and distribute.
+
+## 🤝 Support & Community
+
+### Get Help
+- **📧 Support Email**: Contact our support team for extended hosting tokens
+- **🐛 Bug Reports**: Submit issues via our support channels  
+- **💡 Feature Requests**: We love hearing your ideas!
+- **📚 Documentation**: Comprehensive guides and tutorials
+
+### Stay Updated
+- **🔔 CLI Updates**: Use `taptap --update` to check for new versions
+- **📰 Release Notes**: Stay informed about new features and improvements
+- **🚀 Beta Testing**: Join our beta program for early access to features
 
 ---
 
-**Happy Deploying! 🚀**
+**🎉 Happy Deploying!**
 
-For issues, feature requests, or to obtain extended hosting tokens, please contact our support team.
+*Transform your static sites into live experiences with a single command.*

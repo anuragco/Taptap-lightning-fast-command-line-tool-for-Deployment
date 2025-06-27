@@ -11,12 +11,67 @@ const { v4: uuidv4 } = require('uuid');
 const zipFolder = require('../utils/zipFolder');
 const previewSite = require('../utils/localServer');
 const pkg = require('../package.json');
+const auth = require('../utils/auth');
 const API_BASE = 'https://api.checkscript.site';
 const open = require('open');
-
+const { showHelp, showVersion, showAbout } = require('../utils/help');
 
 (async () => {
   const args = process.argv.slice(2);
+
+  const user = auth.getAuth();
+
+const safeArgs = [
+  // Authentication commands
+  '--login', 'login' , '-l', '--l',
+  '--logout', 'logout', '--logout --silent', 'logout -s',
+  '--register', 'register', '-r',
+  
+  // Utility commands (no auth required)
+  '--version', 'version', '-v', '--v',
+  '--about', 'about', '-a', '--a',
+  '--help', 'help'  , '-h', '--h',
+  '--update', 'update', '-u', '--u',
+
+  // Core commands (no auth required)
+  '--init', 'init', '-i', '--i',
+  '--preview', 'preview', '-p', '--p',
+];
+const isSafe = args.some(arg => safeArgs.includes(arg));
+
+if (!isSafe && !user) {
+  console.log(chalk.red('🚫 You must be logged in to use this command. Run `taptap login` first.'));
+  process.exit(1);
+}
+
+if (args.includes('--register') || args[0] === 'register' || args[0] === '--r') {
+  const { registerCLIUser } = require('../utils/auth');
+  await registerCLIUser();
+  return;
+}
+
+
+  // ✅ Login handler
+if (args.includes('--login') || args[0] === 'login' ) {
+  const auth = require('../utils/auth');
+  if (args.includes('--direct')) {
+    await auth.directLogin();
+  } else {
+    await auth.browserLogin(args.includes('--open'));
+  }
+  return;
+}
+
+// ✅ Logout handler
+if (args.includes('--logout') || args[0] === 'logout' || args[0] === '--l') {
+  const silent = args.includes('--silent') || args.includes('-s');
+  const auth = require('../utils/auth');
+  auth.logout();
+  if (!silent) console.log('👋 Logged out successfully.');
+  process.exit(0);
+}
+
+
   const notifierModule = await import('update-notifier');
   const updateNotifier = notifierModule.default;
   const notifier = updateNotifier({ pkg, updateCheckInterval: 0 });
@@ -82,25 +137,41 @@ function showLogs() {
   });
 }
 
+if (args.includes('--whoami') || args[0] === 'whoami' || args[0] === '-w') {
+  const { getAuth } = require('../utils/auth');
+  const auth = getAuth();
 
-if (args.includes('--init')) {
+  if (!auth) {
+    console.log(chalk.red('🚫 Not logged in. Use `taptap login` first.'));
+    process.exit(1);
+  }
+
+  console.log(chalk.green.bold('\n👤 Logged in as:'));
+  console.log(`📧 Email : ${chalk.cyan(auth.email)}`);
+  console.log(`🙋 Name  : ${chalk.cyan(auth.name || 'Unknown')}`);
+  console.log(`🕒 Since : ${new Date(auth.loggedInAt).toLocaleString()}\n`);
+  process.exit(0);
+}
+
+
+if (args.includes('--init') || args[0] === 'init' || args[0] === '-i' || args[0] === '--i') {
   initProject();
-} else if (args.includes('--logs')) {
+} else if (args.includes('--logs') || args[0] === 'logs' || args[0] === '-l' || args[0] === '--l') {
   showLogs();
-} else if (args.includes('--update')) {
+} else if (args.includes('--update') || args[0] === 'update' || args[0] === '-u') {
   console.log(chalk.cyan(`\nYou're on v${pkg.version}. Latest is ${notifier.update?.latest || 'same'}.\n`));
   process.exit(0);
 }
 
-  // --preview
-  if (args.includes('--preview')) {
+  
+  if (args.includes('--preview') || args[0] === 'preview' || args[0] === '-p' || args[0] === '--p') {
     await previewSite();
     return;
   }
   
 
   // --deploy-list
-  if (args.includes('--deploy-list')) {
+  if (args.includes('--deploy-list') || args[0] === 'deploy-list' || args[0] === '-dl' || args[0] === '--dl') {
     const { regNo } = await inquirer.prompt([
       {
         name: 'regNo',
@@ -112,7 +183,12 @@ if (args.includes('--init')) {
     const spinner = ora('🔍 Fetching your deployments...').start();
 
     try {
-      const { data } = await axios.get(`${API_BASE}/deployments/${regNo}`);
+     const { data } = await axios.get(`${API_BASE}/deployments/${regNo}`, {
+    headers: {
+      'x-user-uuid': user.uuid,
+      'x-user-email': user.email
+    }
+  });
       spinner.succeed(`✅ Found ${data.deployments.length} deployment(s):\n`);
 
       data.deployments.forEach((entry, idx) => {
@@ -127,7 +203,7 @@ if (args.includes('--init')) {
     return;
   }
 
-  if (args.includes('--open')) {
+  if (args.includes('--open') || args[0] === 'open' || args[0] === '-o' || args[0] === '--o')  {
   const logFile = path.join(__dirname, '..', '.taptap-logs.json');
   if (!fs.existsSync(logFile)) {
     console.log(chalk.red('🚫 No deploy logs found.'));
@@ -147,14 +223,19 @@ if (args.includes('--init')) {
 }
 
   // --delete
-  if (args.includes('--delete')) {
+  if (args.includes('--delete') || args[0] === 'delete' || args[0] === '-del' || args[0] === '-d' || args[0] === '--d') {
     const { regNo } = await inquirer.prompt([
       { name: 'regNo', message: 'Enter your Registration Number:' }
     ]);
 
     const spinner = ora('🔍 Fetching deployments...').start();
     try {
-      const { data } = await axios.get(`${API_BASE}/deployments/${regNo}`);
+      const { data } = await axios.get(`${API_BASE}/deployments/${regNo}` , {
+        headers: {
+          'x-user-uuid': user.uuid,
+          'x-user-email': user.email
+        }
+      });
       spinner.stop();
 
       if (!data.deployments.length) {
@@ -164,7 +245,7 @@ if (args.includes('--init')) {
 
       const choices = data.deployments.map((entry, i) => ({
         name: `${i + 1}. ${entry.site}`,
-        value: entry.site.split('/')[4] // UUID
+        value: entry.site.split('/')[4] 
       }));
 
       const { uuid } = await inquirer.prompt([
@@ -182,30 +263,26 @@ if (args.includes('--init')) {
     return;
   }
   // --version
-  if (args.includes('--version')) {
-  console.log(chalk.green.bold(`\n🔧 taptap-cli version: ${pkg.version}\n`));
+  if (args.includes('--version') || args[0] === 'version' || args[0] === '-v' || args[0] === '--v') {
+  showVersion();
   process.exit(0);
 
   }
 
+  if (process.argv.length === 2 || process.argv.includes('--help') || process.argv.includes('-h') || args[0] === 'help' || args[0] === '--h') {
+  showHelp();
+  process.exit(0);
+}
+
 
 // --about
-if (args.includes('--about')) {
-  console.log(chalk.cyan.bold('\n📘 About taptap-cli'));
-  console.log(`
-A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly from your terminal.
-
-👨‍💻 Author: ${pkg.author}
-📦 Package: ${pkg.name}
-🏫 College: LPU, Punjab
-📝 License: ${pkg.license}
-📚 Description: ${pkg.description || 'No description provided.'}
-  `);
+if (args.includes('--about') || args[0] === 'about' || args[0] === '-a' || args[0] === '--a') {
+  showAbout();
   process.exit(0);
 }
 
   // --deploy
-  if (args.includes('--deploy')) {
+  if (args.includes('--deploy') || args[0] === '-d' || args[0] === 'deploy' || args[0] === '--d') {
     const { regNo, title } = await inquirer.prompt([
       {
         name: 'regNo',
@@ -261,8 +338,8 @@ A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly fr
         return;
       }
       
-      if (zipStats.size > 50 * 1024 * 1024) { // 50MB limit
-        validateSpinner.fail('❌ Zip file too large (>50MB)!');
+      if (zipStats.size > 250 * 1024 * 1024) { // 250MB limit
+        validateSpinner.fail('❌ Zip file too large (>250MB)!');
         return;
       }
       
@@ -285,11 +362,14 @@ A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly fr
       const config = {
         headers: {
           ...form.getHeaders(),
-          'User-Agent': 'LiveServe-CLI/1.0'
+          'User-Agent': 'LiveServe-CLI/1.0.16',
+          'x-user-uuid': user.uuid,
+          'x-user-email': user.email,
+          'x-endpoint': 'deploy',
         },
-        timeout: 60000, // 60 seconds timeout
-        maxContentLength: 50 * 1024 * 1024, // 50MB max
-        maxBodyLength: 50 * 1024 * 1024
+        timeout: 60000, 
+        maxContentLength: 250 * 1024 * 1024, 
+        maxBodyLength: 250 * 1024 * 1024
       };
 
       // console.log(chalk.blue(`📤 Uploading ${(fs.statSync(zipPath).size / 1024).toFixed(2)} KB...`));
@@ -358,21 +438,4 @@ A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly fr
     return;
   }
 
-  // Default help
-  console.log(`
-  🔧 ${chalk.cyanBright('Taptap CLI')}
-
-  Usage:
-     ${chalk.green('--init')}            Initialize a new project with template files
-    ${chalk.green('--deploy')}           Deploy current folder to live URL
-    ${chalk.green('--deploy-list')}      Show past deployments from server
-    ${chalk.green('--logs')}             Show local deployment logs
-    ${chalk.green('--preview')}          Preview site locally before deploy
-    ${chalk.green('--delete')}           Delete a deployment
-    ${chalk.green('--open')}             Open the deployed site in default browser
-    ${chalk.green('--update')}           Check for CLI updates
-    ${chalk.green('--version')}          Show CLI version
-    ${chalk.green('--about')}            Show information about this CLI tool
-    ${chalk.green('--help')}             Show this help message
-  `);
 })();
