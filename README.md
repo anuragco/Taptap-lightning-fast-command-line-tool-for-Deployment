@@ -6,18 +6,19 @@
 
 Taptap CLI revolutionizes the deployment experience for front-end developers, students, and teams working on static web projects. Deploy your HTML, CSS, and JavaScript applications to production-ready URLs in seconds, not minutes.
 
-With intelligent project detection, secure user authentication, and automated deployment pipelines, Taptap CLI transforms complex deployment workflows into a single command experience.
+With intelligent project detection, secure user authentication, automated deployment pipelines, and custom domain naming, Taptap CLI transforms complex deployment workflows into a single command experience.
 
 ## ✨ Key Features
 
-- **🔐 Secure Authentication** - User registration and login system for protected deployments
+- **🔐 Enhanced Security** - Streamlined authentication with internal user ID management
+- **🎯 Custom Project Names** - Control your deployment URLs with the `--domain` flag
 - **⚡ Lightning Fast** - Deploy in seconds with optimized compression and transfer
-- **🎯 Zero Configuration** - Works out of the box with intelligent project detection
-- **📊 Deployment Management** - Track, manage, and delete your deployed sites
+- **🛡️ Conflict Prevention** - Smart handling of duplicate project names with clear error messages
+- **📊 Improved Deployment Management** - Per-deployment isolation with selective deletion
 - **🔍 Local Preview** - Test your site locally before going live
 - **🌐 Instant URLs** - Get production-ready URLs immediately after deployment
 - **📝 Smart File Filtering** - Automatically includes only necessary web assets
-- **🗂️ Deployment History** - Complete audit trail of all your deployments
+- **🗂️ Deployment History** - Complete audit trail with enhanced user quota management
 
 ## 📦 Installation
 
@@ -34,7 +35,7 @@ npm install -g taptap-cli
 
 ## 🔑 Authentication System
 
-Taptap CLI now requires user authentication for all deployment operations. This ensures secure access to your projects and deployment history.
+Taptap CLI features a streamlined authentication system that uses your unique user ID internally for all deployment operations, eliminating the need for registration numbers and improving security.
 
 ### First Time Setup
 
@@ -83,8 +84,11 @@ taptap --login
 # Navigate to your project directory
 cd my-awesome-project
 
-# Deploy to live URL
+# Deploy with automatic project naming
 taptap --deploy
+
+# Deploy with custom project name
+taptap --deploy --domain my-portfolio
 ```
 
 ### 4. Manage Your Deployments
@@ -95,7 +99,7 @@ taptap --deploy-list
 # Open your latest site
 taptap --open
 
-# Delete a specific deployment
+# Delete a specific deployment (with interactive selection)
 taptap --delete
 ```
 
@@ -107,6 +111,7 @@ taptap --delete
 |------|-------|-------------|---------------|
 | `--init` | `init`, `-i` | Initialize new project with template files | ❌ |
 | `--deploy` | `deploy`, `-d` | Deploy current folder to live URL | ✅ |
+| `--deploy --domain <name>` | `-d --domain <name>` | Deploy with custom project name | ✅ |
 | `--preview` | `preview`, `-p` | Preview site locally before deploying | ❌ |
 | `--open` | `open`, `-o` | Open most recent deployment in browser | ❌ |
 
@@ -115,7 +120,7 @@ taptap --delete
 | Flag | Alias | Description | Auth Required |
 |------|-------|-------------|---------------|
 | `--deploy-list` | `deploy-list`, `-dl` | Show all past deployments from server | ✅ |
-| `--delete` | `delete`, `-del` | Delete selected deployment from server | ✅ |
+| `--delete` | `delete`, `-del` | Interactive deletion of selected deployment | ✅ |
 | `--logs` | `logs`, `-l` | Show local deployment logs | ❌ |
 
 ### Authentication
@@ -138,6 +143,39 @@ taptap --delete
 | `--version` | `version`, `-v` | Show current CLI version |
 | `--about` | `about`, `-a` | Show CLI and author information |
 | `--help` | `help` | Display help and usage instructions |
+
+## 🎯 Enhanced Deployment Features
+
+### Custom Domain Naming
+The new `--domain` flag gives you full control over your deployment URLs:
+
+```bash
+# Deploy with custom project name
+taptap --deploy --domain my-awesome-portfolio
+
+# Resulting URL: https://taptap.dev/my-awesome-portfolio
+```
+
+### Conflict Handling
+When a project name already exists, Taptap CLI provides clear guidance:
+
+```bash
+taptap --deploy --domain existing-project
+
+# Output:
+# ❌ Error 409: Conflict
+# A project named 'existing-project' already exists.
+# 
+# Options:
+# 1. Choose a different project name: taptap --deploy --domain new-name
+# 2. Delete the existing project: taptap --delete
+```
+
+### Streamlined Authentication Flow
+- **No Registration Numbers**: The CLI now uses your authenticated user ID internally
+- **Structured Headers**: All requests include `x-user-uuid`, `x-user-email`, and `x-endpoint` headers
+- **Enhanced Validation**: Robust server-side middleware enforces authentication checks
+- **Quota Management**: Automatic enforcement of deployment limits per user
 
 ## 📁 File Processing Rules
 
@@ -164,37 +202,65 @@ taptap --delete
 ⚙️ Config Files     → package.json, webpack.config.js
 ```
 
-## 🔄 Deployment Workflow
+## 🔄 Enhanced Deployment Workflow
 
 ### Automated Deployment Process
 
 ```mermaid
 graph LR
     A[Project Scan] --> B[Authentication Check]
-    B --> C[File Filtering]
-    C --> D[Temporary Packaging]
-    D --> E[Compression]
-    E --> F[Secure Upload]
-    F --> G[URL Generation]
-    G --> H[Cleanup]
-    H --> I[Success Notification]
+    B --> C[Domain Validation]
+    C --> D[Conflict Detection]
+    D --> E[File Filtering]
+    E --> F[Temporary Packaging]
+    F --> G[Compression]
+    G --> H[Secure Upload]
+    H --> I[URL Generation]
+    I --> J[Cleanup]
+    J --> K[Success Notification]
 ```
 
-1. **🔍 Project Detection** - Validates `index.html` presence and project structure
-2. **🔐 Authentication Verification** - Ensures valid user session
-3. **📋 File Collection** - Gathers deployable assets using inclusion rules
-4. **📦 Temporary Packaging** - Creates optimized deployment bundle
-5. **🗜️ Compression** - Efficient zip compression for faster transfer
-6. **🔒 Secure Upload** - Encrypted transfer to deployment servers
-7. **🌐 URL Assignment** - Generates unique, production-ready URL
-8. **🧹 Cleanup** - Removes temporary files and artifacts
+1. **🔍 Project Detection** - Enhanced validation of `index.html` presence and project structure
+2. **🔐 Authentication Verification** - Streamlined user session validation with internal ID management
+3. **🎯 Domain Validation** - Checks custom project names and handles conflicts
+4. **⚠️ Conflict Detection** - Prevents overwrites with clear 409 Conflict responses
+5. **📋 File Collection** - Gathers deployable assets using inclusion rules
+6. **📦 Temporary Packaging** - Creates optimized deployment bundle with improved zipping
+7. **🗜️ Compression** - Efficient zip compression for faster transfer
+8. **🔒 Secure Upload** - Encrypted transfer with detailed error handling
+9. **🌐 URL Assignment** - Generates unique, production-ready URL with custom naming
+10. **🧹 Cleanup** - Enhanced cleanup logic removes temporary files and artifacts
+
+## 🗂️ Improved Deletion System
+
+### Per-Deployment Isolation
+The enhanced `--delete` command now provides:
+
+- **Interactive Selection**: Choose from a list of your deployments
+- **Per-Project Deletion**: Only the selected project folder gets deleted
+- **No Cross-Contamination**: Other deployments remain completely unaffected
+- **User-Specific Filtering**: Only shows deployments belonging to your authenticated user
+
+```bash
+taptap --delete
+
+# Interactive output:
+# 📋 Your Deployments:
+# 1. my-portfolio (deployed 2 days ago)
+# 2. landing-page (deployed 1 week ago)
+# 3. blog-site (deployed 3 weeks ago)
+# 
+# Select deployment to delete (1-3): 2
+# 
+# ✅ Successfully deleted 'landing-page'
+```
 
 ## 🏗️ Project Structure Examples
 
 ### ✅ Valid Project Structure
 ```
 my-portfolio/
-├── index.html              ✅ Entry point
+├── index.html              ✅ Entry point (enhanced validation)
 ├── styles/
 │   ├── main.css           ✅ Stylesheets
 │   └── responsive.css     ✅ Additional CSS
@@ -216,23 +282,25 @@ my-portfolio/
 ### ⚠️ Missing Requirements
 ```
 broken-project/
-├── main.html             ❌ No index.html
+├── main.html             ❌ No index.html (enhanced error message)
 ├── style.css             ✅ CSS present
 └── script.js             ✅ JS present
 ```
 
-## 🛡️ Security & Privacy
+## 🛡️ Enhanced Security & Privacy
 
-### Data Protection
-- **🔐 Encrypted Authentication** - Secure token-based auth system
+### Advanced Data Protection
+- **🔐 Internal ID Management** - No more external registration numbers
 - **🌐 HTTPS Only** - All communications encrypted in transit
-- **🚫 No Source Code Storage** - Temporary processing only
-- **🔒 User Isolation** - Complete separation between user accounts
+- **🚫 No Source Code Storage** - Temporary processing only with improved cleanup
+- **🔒 User Isolation** - Complete separation between user accounts with enhanced validation
 - **⏰ Session Management** - Automatic token expiration and renewal
+- **📊 Quota Enforcement** - Server-side limits prevent abuse
 
-### Privacy Commitment
-- No tracking or analytics on deployed sites
-- No access to your source code post-deployment
+### Enhanced Privacy Commitment
+- Structured header authentication for better security
+- Enhanced server-side middleware validation
+- Improved error handling prevents information leakage
 - Complete user data control and deletion rights
 - Transparent data handling practices
 
@@ -243,43 +311,54 @@ broken-project/
 - **💼 Extended Hosting**: Contact support for longer hosting periods
 - **⚡ Renewal**: Simply redeploy to reset the 120-day timer
 
-### Best Practices
+### Enhanced Best Practices
 - Always test with `--preview` before deploying
-- Use meaningful project names for easy identification
+- Use meaningful project names with the `--domain` flag for easy identification
+- Handle 409 Conflicts promptly by choosing unique names or deleting old projects
 - Regularly backup your deployment URLs
-- Keep your CLI updated for latest features and security
+- Keep your CLI updated for latest features and security enhancements
 
-## 🔧 Troubleshooting
+## 🔧 Enhanced Troubleshooting
 
 ### Common Issues & Solutions
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| "No index.html found" | Missing entry point | Ensure `index.html` exists in project root |
-| "Authentication required" | Not logged in | Run `taptap --login` |
-| "Deployment failed" | Network/server error | Check connection, retry deployment |
+| "No index.html found" | Missing entry point | Ensure `index.html` exists in project root (enhanced validation) |
+| "409 Conflict: Project exists" | Duplicate project name | Use different `--domain` name or delete existing project |
+| "Authentication required" | Not logged in | Run `taptap --login` (streamlined flow) |
+| "Deployment failed" | Network/server error | Check connection, retry deployment (improved error messages) |
 | "Session expired" | Token timeout | Re-authenticate with `taptap --login` |
-| "Invalid project structure" | Missing required files | Verify project contains web assets |
+| "Quota exceeded" | Too many deployments | Delete unused projects with `taptap --delete` |
+| "Upload failed" | File/network issue | Enhanced error details provided for debugging |
 
-### Debug Commands
+### Enhanced Debug Commands
 ```bash
-# Check authentication status
+# Check authentication status (shows internal user ID status)
 taptap --whoami
 
-# View detailed logs
+# View detailed logs (improved error reporting)
 taptap --logs
 
-# Test project locally
+# Test project locally (enhanced validation)
 taptap --preview
 
-# Verify CLI version
+# Verify CLI version (check for latest enhancements)
 taptap --version
 ```
 
 ## 🚧 Roadmap & Future Features
 
+### Recently Added ✅
+- **🎯 Custom Domain Naming** - `--domain` flag for custom project names
+- **⚠️ Smart Conflict Handling** - Clear 409 error messages with guidance
+- **🔐 Streamlined Authentication** - Internal user ID management
+- **🗂️ Enhanced Deletion System** - Per-deployment isolation and interactive selection
+- **📊 Quota Management** - Server-side enforcement of deployment limits
+- **🛡️ Structured Headers** - Enhanced security with `x-user-uuid`, `x-user-email`, `x-endpoint`
+
 ### Coming Soon
-- **🎨 Custom Domains** - Connect your own domain names
+- **🎨 True Custom Domains** - Connect your own domain names (beyond project naming)
 - **🔄 CI/CD Integration** - GitHub Actions and GitLab CI support
 - **📊 Analytics Dashboard** - Basic site performance metrics
 - **👥 Team Collaboration** - Share projects with team members
@@ -287,12 +366,31 @@ taptap --version
 - **🌍 CDN Integration** - Global content distribution
 - **🔧 Build Pipeline** - Support for modern frameworks (React, Vue, Angular)
 
-### Community Contributions
-We welcome contributions for:
-- **🔌 Plugin System** - Custom preprocessing workflows
-- **📱 Framework Templates** - Pre-built project scaffolds
-- **🛠️ Developer Tools** - Enhanced debugging and monitoring
-- **🌐 Internationalization** - Multi-language support
+## 🆕 Latest Enhancements Summary
+
+We have significantly enhanced the Taptap CLI with the following improvements:
+
+### 🔐 Streamlined Security
+- **Internal User ID Management**: The `--deploy` command no longer requires registration numbers, using authenticated user IDs internally for improved security and usability
+- **Structured Authentication Headers**: All requests now include `x-user-uuid`, `x-user-email`, and `x-endpoint` headers for robust validation
+- **Enhanced Middleware**: Server-side authentication checks have been upgraded with better error handling
+
+### 🎯 Custom Project Control
+- **Domain Flag**: New `--domain <name>` flag allows custom project naming for better URL control
+- **Smart Conflict Handling**: Clear `409 Conflict` responses when project names exist, with helpful guidance on resolution
+- **Enhanced Validation**: Improved `index.html` validation and project structure checking
+
+### 🗂️ Improved Deployment Management
+- **Per-Deployment Isolation**: Enhanced deletion logic ensures only selected projects are removed
+- **Interactive Selection**: Users can choose from their deployment list for precise deletion
+- **Quota Management**: Server-side limits prevent abuse while maintaining user flexibility
+- **Better Error Handling**: Detailed error messages for upload failures and file issues
+
+### 🔧 Technical Improvements
+- **Enhanced Zipping Process**: Improved project packaging and compression
+- **Robust Cleanup Logic**: Better temporary file management and cleanup procedures
+- **Detailed Error Reporting**: More informative error messages throughout the deployment process
+- **Production-Safe Operations**: Enhanced reliability and user-friendly experience
 
 ## 👨‍💻 About the Author
 
@@ -300,7 +398,7 @@ We welcome contributions for:
 Computer Science Student at LPU Punjab  
 Passionate about simplifying deployment workflows for developers worldwide.
 
-*"Making deployment accessible to everyone, from students to professionals."*
+*"Making deployment accessible to everyone, from students to professionals, with enhanced security and user control."*
 
 ## 📄 License
 
@@ -321,6 +419,6 @@ Passionate about simplifying deployment workflows for developers worldwide.
 
 ---
 
-**🎉 Happy Deploying!**
+**🎉 Happy Deploying with Enhanced Control!**
 
-*Transform your static sites into live experiences with a single command.*
+*Transform your static sites into live experiences with a single command, now with custom naming, better security, and improved user experience.*

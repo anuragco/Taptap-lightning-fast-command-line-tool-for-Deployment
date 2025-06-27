@@ -80,6 +80,7 @@ async function browserLogin(openBrowser = false) {
               uuid,
               email: pollRes.data.email,
               name: pollRes.data.name,
+              unique_id: pollRes.data.unique_id,
               loggedInAt: Date.now()
             };
 
@@ -120,6 +121,7 @@ async function directLogin() {
       uuid: res.data.uuid,
       email: res.data.email,
       name: res.data.name,
+      unique_id: res.data.unique_id,
       loggedInAt: Date.now()
     };
 
