@@ -28,6 +28,18 @@ Install Taptap CLI globally via npm:
 npm install -g taptap-cli
 ```
 
+## 🛠️ One-Step Installer (No Node.js Needed)
+
+Choose your platform and run the installer file:
+
+| OS      | Installer Script                                     |
+|---------|------------------------------------------------------|
+| Windows | [install-windows.ps1](installer/install-windows.ps1) |
+| Linux   | [install-linux.sh](installer/install-linux.sh)       |
+| macOS   | [install-macos.sh](installer/install-macos.sh)       |
+
+
+
 **System Requirements:**
 - Node.js 14+ 
 - npm 6+
