@@ -30,7 +30,7 @@
     "anurag"
   ],
   "author": "Anurag Anand <aws.anu.co@gmail.com> (LPU, Punjab)",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "archiver": "^7.0.1",
     "axios": "^1.10.0",

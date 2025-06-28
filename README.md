@@ -400,9 +400,14 @@ Passionate about simplifying deployment workflows for developers worldwide.
 
 *"Making deployment accessible to everyone, from students to professionals, with enhanced security and user control."*
 
-## 📄 License
+## 📄 License Notice
 
-**ISC License** - Free to use, modify, and distribute.
+As of version 2.3.0, Taptap CLI is now licensed under the [MIT License](LICENSE).
+
+All users must accept the MIT license terms before using the CLI. A prompt will appear on first use to record consent.
+
+By using this software, you agree to the terms of the license, including appropriate attribution and disclaimers.
+
 
 ## 🤝 Support & Community
 

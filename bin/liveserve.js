@@ -19,7 +19,7 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
 (async () => {
   const args = process.argv.slice(2);
 
-  const user = auth.getAuth();
+  let user = null;
 
   const safeArgs = [
     // Authentication commands
@@ -65,13 +65,52 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
   ];
   const isSafe = args.some((arg) => safeArgs.includes(arg));
 
-  if (!isSafe && !user) {
-    console.log(
-      chalk.red(
-        "🚫 You must be logged in to use this command. Run `taptap login` first."
-      )
-    );
-    process.exit(1);
+  const isSafeCommand = args.some((arg) => safeArgs.includes(arg));
+
+  const CLI_ROOT = path.resolve(__dirname, "..");
+  const consentFile = path.join(CLI_ROOT, ".taptap_mit_consent");
+
+  async function ensureLicenseAccepted() {
+    if (!fs.existsSync(consentFile)) {
+      console.log("\n📜 This software is licensed under the MIT License.\n");
+      console.log(
+        "By using Taptap CLI, you agree to the terms of the MIT license.\n"
+      );
+      console.log(
+        "📜 By using this tool, you agree to the terms in terms.txt or policy.md"
+      );
+
+      const { accepted } = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "accepted",
+          message: "Do you accept the MIT license terms?",
+          default: false,
+        },
+      ]);
+
+      if (!accepted) {
+        console.log(
+          "❌ You must accept the license terms to use this software."
+        );
+        process.exit(1);
+      }
+
+      fs.writeFileSync(consentFile, "MIT license accepted");
+    }
+  }
+  await ensureLicenseAccepted();
+
+  if (!isSafeCommand) {
+    user = auth.getAuth();
+    if (!user) {
+      console.log(
+        chalk.red(
+          "🚫 You must be logged in to use this command. Run `taptap login` first."
+        )
+      );
+      process.exit(1);
+    }
   }
 
   if (
