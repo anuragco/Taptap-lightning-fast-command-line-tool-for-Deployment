@@ -34,9 +34,9 @@ Choose your platform and run the installer file:
 
 | OS      | Installer Script                                     |
 |---------|------------------------------------------------------|
-| Windows | [install-windows.ps1](installer/install-windows.ps1) |
-| Linux   | [install-linux.sh](installer/install-linux.sh)       |
-| macOS   | [install-macos.sh](installer/install-macos.sh)       |
+| Windows | [install-windows.ps1](installers/install-windows.ps1) |
+| Linux   | [install-linux.sh](installers/install-linux.sh)       |
+| macOS   | [install-macos.sh](installers/install-macos.sh)       |
 
 
 
