@@ -5,11 +5,15 @@
     "taptap": "./bin/liveserve.js"
   },
   "pkg": {
-    "assets": [
-      "bin/**/*"
-    ],
-    "scripts": "bin/liveserve.js"
-  },
+  "scripts": "bin/liveserve.js",
+  "assets": ["bin/**/*"],
+  "targets": [
+    "node18-linux-x64",
+    "node18-win-x64",
+    "node18-macos-x64"
+  ],
+  "outputPath": "dist"
+},
   "description": "A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly from your terminal.",
   "main": "index.js",
   "scripts": {
@@ -41,6 +45,7 @@
     "inquirer": "^8.2.6",
     "open": "^8.4.0",
     "ora": "^5.4.1",
+    "semver": "^7.7.2",
     "update-notifier": "^7.3.1",
     "uuid": "^11.1.0"
   }

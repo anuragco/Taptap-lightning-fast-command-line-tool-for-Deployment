@@ -1,0 +1,9 @@
+# .dockerignore
+node_modules
+dist
+.git
+*.log
+*.zip
+*.tar.gz
+npm-debug.log
+.DS_Store

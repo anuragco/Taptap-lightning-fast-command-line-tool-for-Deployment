@@ -14,6 +14,7 @@ const pkg = require("../package.json");
 const auth = require("../utils/auth");
 const API_BASE = "https://api.checkscript.site";
 const open = require("open");
+const semver = require("semver");
 const { showHelp, showVersion, showAbout } = require("../utils/help");
 
 (async () => {
@@ -71,38 +72,46 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
   const consentFile = path.join(CLI_ROOT, ".taptap_mit_consent");
 
   async function ensureLicenseAccepted() {
-  if (!fs.existsSync(consentFile)) {
-    console.log("\n📜 This software is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC-BY-NC-ND-4.0).\n");
-    console.log(
-      "By using Taptap CLI, you agree to the following terms:\n"
-    );
-    console.log("✅ Attribution: You must give appropriate credit to the original author");
-    console.log("❌ NonCommercial: You may not use this software for commercial purposes");
-    console.log("❌ NoDerivatives: You may not modify or create derivative works\n");
-    console.log(
-      "📜 By using this tool, you also agree to the terms in terms.txt or policy.md\n"
-    );
-    console.log("🔗 Full license: https://creativecommons.org/licenses/by-nc-nd/4.0/\n");
-
-    const { accepted } = await inquirer.prompt([
-      {
-        type: "confirm",
-        name: "accepted",
-        message: "Do you accept the CC-BY-NC-ND-4.0 license terms?",
-        default: false,
-      },
-    ]);
-
-    if (!accepted) {
+    if (!fs.existsSync(consentFile)) {
       console.log(
-        "❌ You must accept the license terms to use this software."
+        "\n📜 This software is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC-BY-NC-ND-4.0).\n"
       );
-      process.exit(1);
-    }
+      console.log("By using Taptap CLI, you agree to the following terms:\n");
+      console.log(
+        "✅ Attribution: You must give appropriate credit to the original author"
+      );
+      console.log(
+        "❌ NonCommercial: You may not use this software for commercial purposes"
+      );
+      console.log(
+        "❌ NoDerivatives: You may not modify or create derivative works\n"
+      );
+      console.log(
+        "📜 By using this tool, you also agree to the terms in terms.txt or policy.md\n"
+      );
+      console.log(
+        "🔗 Full license: https://creativecommons.org/licenses/by-nc-nd/4.0/\n"
+      );
 
-    fs.writeFileSync(consentFile, "CC-BY-NC-ND-4.0 license accepted");
+      const { accepted } = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "accepted",
+          message: "Do you accept the CC-BY-NC-ND-4.0 license terms?",
+          default: false,
+        },
+      ]);
+
+      if (!accepted) {
+        console.log(
+          "❌ You must accept the license terms to use this software."
+        );
+        process.exit(1);
+      }
+
+      fs.writeFileSync(consentFile, "CC-BY-NC-ND-4.0 license accepted");
+    }
   }
-}
   await ensureLicenseAccepted();
 
   if (!isSafeCommand) {
@@ -151,7 +160,7 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
   const updateNotifier = notifierModule.default;
   const notifier = updateNotifier({ pkg, updateCheckInterval: 0 });
 
-  if (notifier.update) {
+  if (notifier.update && semver.gt(notifier.update.latest, pkg.version)) {
     console.log(
       chalk.yellow(
         `\n🚨 New version available: ${notifier.update.latest}. You're using ${pkg.version}`
@@ -159,10 +168,14 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
     );
     console.log(`Run ${chalk.cyan(`npm i -g taptap-cli`)} to update.\n`);
 
-    // 🔒 Block execution if mandatory
-    if (notifier.update.latest.split(".")[2] !== pkg.version.split(".")[2]) {
+    const isMajorUpdate =
+      semver.major(notifier.update.latest) > semver.major(pkg.version);
+
+    if (isMajorUpdate) {
       console.log(
-        chalk.red("⚠️  Mandatory update required! Please update the CLI.\n")
+        chalk.red(
+          "⚠️  Mandatory major update required! Please update the CLI.\n"
+        )
       );
       process.exit(1);
     }

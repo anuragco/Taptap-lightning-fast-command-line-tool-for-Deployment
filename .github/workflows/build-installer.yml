@@ -1,0 +1,46 @@
+name: Build Installers
+
+on:
+  push:
+    tags:
+      - 'v*' # or use 'main' if not using tags
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install pkg
+      run: npm install -g pkg
+
+    - name: Build binary
+      run: pkg . --targets node18-${{ matrix.os == 'windows-latest' && 'win' || (matrix.os == 'macos-latest' && 'macos' || 'linux') }}-x64 --out-path dist
+
+    - name: Build installer (Windows)
+      if: matrix.os == 'windows-latest'
+      run: bash scripts/build-windows-installer.sh
+
+    - name: Build installer (macOS)
+      if: matrix.os == 'macos-latest'
+      run: bash scripts/build-mac-installer.sh
+
+    - name: Build installer (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: bash scripts/build-linux-installer.sh
+
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
