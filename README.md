@@ -32,11 +32,12 @@ npm install -g taptap-cli
 
 Choose your platform and run the installer file:
 
-| OS      | Direct Installer Script                                              |
-|---------|----------------------------------------------------------------------|
-| Windows | [Download](https://raw.githubusercontent.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/main/installers/install-windows.ps1) |
-| Linux   | [Download](https://raw.githubusercontent.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/main/installers/install-linux.sh)     |
-| macOS   | [Download](https://raw.githubusercontent.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/main/installers/install-macos.sh)     |
+| OS         | Installer Script                                                                                                                                                              |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🪟 Windows | [📥 install-windows.ps1 (auto-setup + PATH)](https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/releases/download/v2.6.0/install-windows.ps1) |
+| 🐧 Linux   | [📥 install-linux.sh (auto-setup)](https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/releases/download/v2.6.0/install-linux.sh)              |
+| 🍎 macOS   | [📥 install-macos.sh (auto-setup)](https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/releases/download/v2.6.0/install-macos.sh)              |
+
 
 
 
