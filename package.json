@@ -1,6 +1,6 @@
 {
   "name": "taptap-cli",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "bin": {
     "taptap": "./bin/liveserve.js"
   },
@@ -30,7 +30,7 @@
     "anurag"
   ],
   "author": "Anurag Anand <aws.anu.co@gmail.com> (LPU, Punjab)",
-  "license": "MIT",
+  "license": "CC-BY-NC-ND-4.0",
   "dependencies": {
     "archiver": "^7.0.1",
     "axios": "^1.10.0",

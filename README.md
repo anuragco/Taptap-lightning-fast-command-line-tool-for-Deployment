@@ -402,12 +402,17 @@ Passionate about simplifying deployment workflows for developers worldwide.
 
 ## 📄 License Notice
 
-As of version 2.3.0, Taptap CLI is now licensed under the [MIT License](LICENSE).
+As of version 2.4.0, Taptap CLI is now licensed under the [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License](https://creativecommons.org/licenses/by-nc-nd/4.0/).
 
-All users must accept the MIT license terms before using the CLI. A prompt will appear on first use to record consent.
+All users must accept the CC-BY-NC-ND-4.0 license terms before using the CLI. A prompt will appear on first use to record consent.
 
-By using this software, you agree to the terms of the license, including appropriate attribution and disclaimers.
+By using this software, you agree to:
+- Provide appropriate attribution to the original author
+- Not use the software for commercial purposes
+- Not create derivative works or modifications
+- Comply with all terms of the Creative Commons license
 
+For the full license text, see the [LICENSE](./LICENSE) file.
 
 ## 🤝 Support & Community
 

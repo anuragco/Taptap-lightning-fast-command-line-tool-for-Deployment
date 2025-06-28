@@ -1,20 +1,24 @@
-Taptap CLI – Usage Terms
+# Taptap CLI – Usage Terms
 
 By using this software, you agree to the following:
 
-1. LICENSE:
-   - This software is licensed under the MIT License.
+## 1. LICENSE:
+   - This software is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC-BY-NC-ND-4.0).
    - You must retain all copyright and license notices.
+   - You must provide appropriate attribution to the original author.
 
-2. RESTRICTIONS:
-   - You are not allowed to rebrand, resell, or redistribute this CLI tool under a different name without written permission.
-   - Unauthorized use of API endpoints (e.g., deploy, upload) without valid login credentials is prohibited.
+## 2. RESTRICTIONS:
+   - **Commercial Use Prohibited**: You may not use this software for commercial purposes.
+   - **No Derivatives**: You may not modify, adapt, or create derivative works based on this software.
+   - **No Rebranding**: You are not allowed to rebrand, resell, or redistribute this CLI tool under a different name.
+   - **API Security**: Unauthorized use of API endpoints (e.g., deploy, upload) without valid login credentials is prohibited.
 
-3. MONITORING:
+## 3. MONITORING:
    - Your IP address, UUID, and email may be logged during usage for security and abuse prevention.
    - Abuse of this tool may result in permanent bans.
 
-4. LIABILITY:
+## 4. LIABILITY:
    - The software is provided "AS IS", without warranty of any kind.
+   - The author disclaims all warranties, express or implied, including but not limited to warranties of merchantability and fitness for a particular purpose.
 
 Report abuse or unauthorized use: aws.anu.co@gmail.com

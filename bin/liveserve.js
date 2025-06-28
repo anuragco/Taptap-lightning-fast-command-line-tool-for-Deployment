@@ -71,34 +71,38 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
   const consentFile = path.join(CLI_ROOT, ".taptap_mit_consent");
 
   async function ensureLicenseAccepted() {
-    if (!fs.existsSync(consentFile)) {
-      console.log("\n📜 This software is licensed under the MIT License.\n");
+  if (!fs.existsSync(consentFile)) {
+    console.log("\n📜 This software is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC-BY-NC-ND-4.0).\n");
+    console.log(
+      "By using Taptap CLI, you agree to the following terms:\n"
+    );
+    console.log("✅ Attribution: You must give appropriate credit to the original author");
+    console.log("❌ NonCommercial: You may not use this software for commercial purposes");
+    console.log("❌ NoDerivatives: You may not modify or create derivative works\n");
+    console.log(
+      "📜 By using this tool, you also agree to the terms in terms.txt or policy.md\n"
+    );
+    console.log("🔗 Full license: https://creativecommons.org/licenses/by-nc-nd/4.0/\n");
+
+    const { accepted } = await inquirer.prompt([
+      {
+        type: "confirm",
+        name: "accepted",
+        message: "Do you accept the CC-BY-NC-ND-4.0 license terms?",
+        default: false,
+      },
+    ]);
+
+    if (!accepted) {
       console.log(
-        "By using Taptap CLI, you agree to the terms of the MIT license.\n"
+        "❌ You must accept the license terms to use this software."
       );
-      console.log(
-        "📜 By using this tool, you agree to the terms in terms.txt or policy.md"
-      );
-
-      const { accepted } = await inquirer.prompt([
-        {
-          type: "confirm",
-          name: "accepted",
-          message: "Do you accept the MIT license terms?",
-          default: false,
-        },
-      ]);
-
-      if (!accepted) {
-        console.log(
-          "❌ You must accept the license terms to use this software."
-        );
-        process.exit(1);
-      }
-
-      fs.writeFileSync(consentFile, "MIT license accepted");
+      process.exit(1);
     }
+
+    fs.writeFileSync(consentFile, "CC-BY-NC-ND-4.0 license accepted");
   }
+}
   await ensureLicenseAccepted();
 
   if (!isSafeCommand) {
