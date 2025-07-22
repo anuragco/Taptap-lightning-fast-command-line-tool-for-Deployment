@@ -1,6 +1,6 @@
 {
   "name": "taptap-cli",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "bin": {
     "taptap": "./bin/liveserve.js"
   },
