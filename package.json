@@ -1,19 +1,21 @@
 {
   "name": "taptap-cli",
-  "version": "2.4.0",
+  "version": "3.4.0",
   "bin": {
     "taptap": "./bin/liveserve.js"
   },
   "pkg": {
-  "scripts": "bin/liveserve.js",
-  "assets": ["bin/**/*"],
-  "targets": [
-    "node18-linux-x64",
-    "node18-win-x64",
-    "node18-macos-x64"
-  ],
-  "outputPath": "dist"
-},
+    "scripts": "bin/liveserve.js",
+    "assets": [
+      "bin/**/*"
+    ],
+    "targets": [
+      "node18-linux-x64",
+      "node18-win-x64",
+      "node18-macos-x64"
+    ],
+    "outputPath": "dist"
+  },
   "description": "A simple and powerful CLI tool to deploy static HTML/CSS/JS projects directly from your terminal.",
   "main": "index.js",
   "scripts": {
@@ -36,6 +38,7 @@
   "author": "Anurag Anand <aws.anu.co@gmail.com> (LPU, Punjab)",
   "license": "CC-BY-NC-ND-4.0",
   "dependencies": {
+    "adm-zip": "^0.5.16",
     "archiver": "^7.0.1",
     "axios": "^1.10.0",
     "chalk": "^4.1.2",

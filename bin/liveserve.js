@@ -16,6 +16,7 @@ const API_BASE = "https://api.checkscript.site";
 const open = require("open");
 const semver = require("semver");
 const { showHelp, showVersion, showAbout } = require("../utils/help");
+const handleAgentCommand = require("../utils/agent-handler");
 
 (async () => {
   const args = process.argv.slice(2);
@@ -365,6 +366,19 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
     await open(latest.url);
     return;
   }
+  
+  // --agent
+ if (args.includes("--agent" ) || args[0] === "agent" ) {
+    const promptIndex = args.findIndex(arg => arg === '--prompt' || arg === 'prompt');
+    if (promptIndex === -1 || !args[promptIndex + 1]) {
+      console.log(chalk.red("❌ Error: The --agent flag requires a --prompt."));
+      console.log(chalk.yellow("💡 Usage: taptap --agent --prompt \"Your request\""));
+      process.exit(1);
+    }
+    const userPrompt = args[promptIndex + 1];
+    await handleAgentCommand(userPrompt); 
+    return;
+  }
 
   // --delete
   if (
@@ -575,7 +589,7 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
 
       // console.log(chalk.blue(`📤 Uploading ${(fs.statSync(zipPath).size / 1024).toFixed(2)} KB...`));
 
-      const res = await axios.post(`${API_BASE}/upload`, form, config);
+      const res = await axios.post(`${API_BASE}/upload`, form, config ,{ timeout: 30000 });
 
       uploadSpinner.succeed("✅ Upload successful!");
       console.log(`\n🔗 ${chalk.green(res.data.url)}`);
@@ -596,7 +610,7 @@ const { showHelp, showVersion, showAbout } = require("../utils/help");
       // 🔧 Test the deployed site
       const testSpinner = ora("🧪 Testing deployed site...").start();
       try {
-        const testRes = await axios.get(res.data.url, { timeout: 10000 });
+        const testRes = await axios.get(res.data.url, { timeout: 30000 });
         if (testRes.status === 200) {
           testSpinner.succeed("✅ Site is live and accessible!");
         }

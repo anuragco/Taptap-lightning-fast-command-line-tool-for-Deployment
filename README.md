@@ -1,15 +1,16 @@
 # Taptap CLI
 
-> A lightning-fast, secure command-line tool for deploying static web projects with built-in authentication and zero configuration hassle.
+> A lightning-fast, secure command-line tool for deploying static web projects with built-in authentication, zero configuration hassle, and now featuring an intelligent AI Agent for automatic project generation.
 
 ## 🚀 Overview
 
-Taptap CLI revolutionizes the deployment experience for front-end developers, students, and teams working on static web projects. Deploy your HTML, CSS, and JavaScript applications to production-ready URLs in seconds, not minutes.
+Taptap CLI revolutionizes the deployment experience for front-end developers, students, and teams working on static web projects. Deploy your HTML, CSS, and JavaScript applications to production-ready URLs in seconds, not minutes. Now with the power of AI, you can generate complete web projects from a single text prompt.
 
-With intelligent project detection, secure user authentication, automated deployment pipelines, and custom domain naming, Taptap CLI transforms complex deployment workflows into a single command experience.
+With intelligent project detection, secure user authentication, automated deployment pipelines, custom domain naming, and our revolutionary AI Agent, Taptap CLI transforms complex development and deployment workflows into a single command experience.
 
 ## ✨ Key Features
 
+- **🤖 AI-Powered Project Generation** - Create complete web projects from simple text prompts
 - **🔐 Enhanced Security** - Streamlined authentication with internal user ID management
 - **🎯 Custom Project Names** - Control your deployment URLs with the `--domain` flag
 - **⚡ Lightning Fast** - Deploy in seconds with optimized compression and transfer
@@ -38,13 +39,81 @@ Choose your platform and run the installer file:
 | 🐧 Linux   | [📥 install-linux.sh (auto-setup)](https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/releases/download/v2.6.0/install-linux.sh)              |
 | 🍎 macOS   | [📥 install-macos.sh (auto-setup)](https://github.com/anuragco/Taptap-lightning-fast-command-line-tool-for-Deployment/releases/download/v2.6.0/install-macos.sh)              |
 
-
-
-
 **System Requirements:**
 - Node.js 14+ 
 - npm 6+
 - Internet connection for deployment
+
+## 🤖 AI Agent: Revolutionary Project Generation
+
+We've introduced a powerful AI Agent feature that transforms the development process by leveraging a robust, server-centric architecture to build complete web projects from a single text prompt. When you use the `taptap --agent` command, the CLI securely sends your request to our backend, which initiates a dedicated task for the AI to begin its work. To create an engaging and transparent experience, the CLI then polls the server every three seconds for real-time status updates, displaying dynamic feedback directly in your terminal with messages like "Analyzing prompt...", "Deconstructing user request...", and "Writing files...". This system is fully interactive; if the agent encounters an ambiguous request, it will pause the task and ask for clarification, allowing you to provide more details before it continues. Once the agent has finished building the project on the server, it compresses all the generated files into a zip archive. The CLI then automatically downloads this archive, extracts the contents into your current working directory, and cleans up, delivering a complete, ready-to-use project without any manual file handling.
+
+### 🧠 AI Agent Capabilities
+
+- **🎨 Complete Web Projects** - Generate HTML, CSS, JavaScript, and assets from text descriptions
+- **📱 Responsive Design** - Creates mobile-first, responsive layouts automatically
+- **🎯 Interactive Elements** - Builds functional components, forms, and user interactions
+- **🖼️ Asset Generation** - Creates placeholder images, icons, and media content
+- **⚡ Framework Support** - Generates vanilla JavaScript, React, Vue, or framework-specific projects
+- **🌈 Modern Styling** - Implements contemporary design trends and best practices
+- **📊 Dynamic Content** - Creates interactive charts, animations, and data visualizations
+
+### 🚀 AI Agent Quick Start
+
+```bash
+# Generate a complete portfolio website
+taptap --agent --prompt "Create a modern portfolio website for a web developer with dark theme"
+
+# Build an interactive landing page
+taptap --agent --prompt "Make a landing page for a SaaS product with hero section, features, and contact form"
+
+# Create a business website
+taptap --agent --prompt "Build a restaurant website with menu, gallery, and online reservation system"
+
+# Generate an educational project
+taptap --agent --prompt "Create an interactive learning dashboard for students with progress tracking"
+```
+
+### 🔄 AI Agent Workflow
+
+```mermaid
+graph LR
+    A[User Prompt] --> B[Secure Upload]
+    B --> C[AI Analysis]
+    C --> D[Project Planning]
+    D --> E[Code Generation]
+    E --> F{Clarification Needed?}
+    F -->|Yes| G[Request Details]
+    G --> H[User Input]
+    H --> E
+    F -->|No| I[File Creation]
+    I --> J[Asset Generation]
+    J --> K[Project Packaging]
+    K --> L[Download & Extract]
+    L --> M[Ready to Deploy]
+```
+
+### 💡 AI Agent Examples
+
+#### Simple Project Generation
+```bash
+taptap --agent --prompt "Personal blog with clean design"
+```
+
+#### Complex Interactive Projects  
+```bash
+taptap --agent --prompt "E-commerce product showcase with cart functionality and payment form"
+```
+
+#### Educational Content
+```bash
+taptap --agent --prompt "Interactive quiz app for learning JavaScript with score tracking"
+```
+
+#### Business Solutions
+```bash
+taptap --agent --prompt "Corporate website with team profiles, services section, and contact form"
+```
 
 ## 🔑 Authentication System
 
@@ -81,6 +150,9 @@ Taptap CLI features a streamlined authentication system that uses your unique us
 ```bash
 # Create a new project with template files
 taptap --init
+
+# Or generate a project with AI
+taptap --agent --prompt "Your project description here"
 ```
 
 ### 2. Authenticate
@@ -94,7 +166,7 @@ taptap --login
 
 ### 3. Deploy Your Site
 ```bash
-# Navigate to your project directory
+# Navigate to your project directory (if not using AI agent)
 cd my-awesome-project
 
 # Deploy with automatic project naming
@@ -117,6 +189,12 @@ taptap --delete
 ```
 
 ## 📋 Complete Command Reference
+
+### 🤖 AI Agent Commands
+
+| Flag | Alias | Description | Auth Required |
+|------|-------|-------------|---------------|
+| `--agent --prompt "<text>"` | `agent --prompt "<text>"` | Generate complete project from text description | ✅ |
 
 ### Core Commands
 
@@ -309,6 +387,7 @@ broken-project/
 - **🔒 User Isolation** - Complete separation between user accounts with enhanced validation
 - **⏰ Session Management** - Automatic token expiration and renewal
 - **📊 Quota Enforcement** - Server-side limits prevent abuse
+- **🤖 AI Privacy** - Prompts processed securely with no permanent storage
 
 ### Enhanced Privacy Commitment
 - Structured header authentication for better security
@@ -316,6 +395,7 @@ broken-project/
 - Improved error handling prevents information leakage
 - Complete user data control and deletion rights
 - Transparent data handling practices
+- AI-generated content privacy protection
 
 ## ⚠️ Important Notices
 
@@ -330,6 +410,8 @@ broken-project/
 - Handle 409 Conflicts promptly by choosing unique names or deleting old projects
 - Regularly backup your deployment URLs
 - Keep your CLI updated for latest features and security enhancements
+- Be specific with AI prompts for better project generation results
+- Review AI-generated code before deployment for quality assurance
 
 ## 🔧 Enhanced Troubleshooting
 
@@ -344,6 +426,8 @@ broken-project/
 | "Session expired" | Token timeout | Re-authenticate with `taptap --login` |
 | "Quota exceeded" | Too many deployments | Delete unused projects with `taptap --delete` |
 | "Upload failed" | File/network issue | Enhanced error details provided for debugging |
+| "AI Agent timeout" | Complex prompt processing | Simplify prompt or check network connection |
+| "Prompt requires --prompt flag" | Missing required parameter | Use: `taptap --agent --prompt "Your description"` |
 
 ### Enhanced Debug Commands
 ```bash
@@ -363,6 +447,7 @@ taptap --version
 ## 🚧 Roadmap & Future Features
 
 ### Recently Added ✅
+- **🤖 AI Agent Integration** - Generate complete projects from text prompts with real-time feedback
 - **🎯 Custom Domain Naming** - `--domain` flag for custom project names
 - **⚠️ Smart Conflict Handling** - Clear 409 error messages with guidance
 - **🔐 Streamlined Authentication** - Internal user ID management
@@ -371,6 +456,7 @@ taptap --version
 - **🛡️ Structured Headers** - Enhanced security with `x-user-uuid`, `x-user-email`, `x-endpoint`
 
 ### Coming Soon
+- **🧠 Advanced AI Models** - Support for specialized AI models for different project types
 - **🎨 True Custom Domains** - Connect your own domain names (beyond project naming)
 - **🔄 CI/CD Integration** - GitHub Actions and GitLab CI support
 - **📊 Analytics Dashboard** - Basic site performance metrics
@@ -378,10 +464,19 @@ taptap --version
 - **🎯 A/B Testing** - Deploy multiple versions for testing
 - **🌍 CDN Integration** - Global content distribution
 - **🔧 Build Pipeline** - Support for modern frameworks (React, Vue, Angular)
+- **🤖 AI Templates** - Pre-built AI prompts for common project types
+- **📱 Mobile App Companion** - Manage deployments from your phone
 
 ## 🆕 Latest Enhancements Summary
 
-We have significantly enhanced the Taptap CLI with the following improvements:
+We have significantly enhanced the Taptap CLI with the following revolutionary improvements:
+
+### 🤖 AI-Powered Development
+- **Intelligent Project Generation**: Create complete web applications from simple text descriptions
+- **Real-Time Feedback**: Interactive terminal updates show AI progress with 3-second polling
+- **Interactive Clarification**: AI can pause to ask for additional details when prompts are ambiguous
+- **Automatic File Handling**: Server-side zip creation with local extraction and cleanup
+- **Comprehensive Output**: Generate HTML, CSS, JavaScript, and assets in one command
 
 ### 🔐 Streamlined Security
 - **Internal User ID Management**: The `--deploy` command no longer requires registration numbers, using authenticated user IDs internally for improved security and usability
@@ -409,9 +504,9 @@ We have significantly enhanced the Taptap CLI with the following improvements:
 
 **Anurag Anand**  
 Computer Science Student at LPU Punjab  
-Passionate about simplifying deployment workflows for developers worldwide.
+Passionate about simplifying deployment workflows and democratizing web development with AI.
 
-*"Making deployment accessible to everyone, from students to professionals, with enhanced security and user control."*
+*"Making deployment and development accessible to everyone, from students to professionals, with enhanced security, intelligent automation, and user control."*
 
 ## 📄 License Notice
 
@@ -430,18 +525,20 @@ For the full license text, see the [LICENSE](./LICENSE) file.
 ## 🤝 Support & Community
 
 ### Get Help
-- **📧 Support Email**: Contact our support team for extended hosting tokens
+- **📧 Support Email**: Contact our support team for extended hosting tokens and AI feature questions
 - **🐛 Bug Reports**: Submit issues via our support channels  
-- **💡 Feature Requests**: We love hearing your ideas!
-- **📚 Documentation**: Comprehensive guides and tutorials
+- **💡 Feature Requests**: We love hearing your ideas for new AI capabilities!
+- **📚 Documentation**: Comprehensive guides, tutorials, and AI prompt examples
 
 ### Stay Updated
 - **🔔 CLI Updates**: Use `taptap --update` to check for new versions
-- **📰 Release Notes**: Stay informed about new features and improvements
-- **🚀 Beta Testing**: Join our beta program for early access to features
+- **📰 Release Notes**: Stay informed about new features and AI improvements
+- **🚀 Beta Testing**: Join our beta program for early access to advanced AI features
 
 ---
 
-**🎉 Happy Deploying with Enhanced Control!**
+**🎉 Happy Developing and Deploying with AI-Enhanced Control!**
 
-*Transform your static sites into live experiences with a single command, now with custom naming, better security, and improved user experience.*
+*Transform your ideas into live web experiences with a single command, powered by intelligent AI generation, custom naming, enhanced security, and improved user experience.*
+
+Made with ❤️ by Anurag Anand
