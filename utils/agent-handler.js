@@ -29,6 +29,7 @@ async function handleAgentCommand(initialPrompt) {
         headers: {
           "x-user-uuid": user.uuid,
           "x-user-email": user.email,
+          "x-endpoint": "agentai",
         },
       }
     );
